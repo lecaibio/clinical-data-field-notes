@@ -5,3 +5,6 @@ __pycache__/
 
 # raw data is downloaded/generated, not committed
 */data/
+
+# tool responses re-fetch from public APIs in seconds
+02-agent-autonomy-variance/cache/
