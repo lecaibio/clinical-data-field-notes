@@ -8,7 +8,8 @@ The write-up is the thing to read; the notebook is here for anyone who wants to 
 | # | Entry | The finding | Post | Notebook |
 |---|---|---|---|---|
 | 01 | Depression screening in NHANES vs Synthea | Both sources put 7–8% of adults over the PHQ-9 cutoff, via components that differ eightfold in opposite directions — and in Synthea nothing downstream ever reads the score | [Where Synthetic Clinical Data Gets Its Correlations](https://lecaibio.github.io/2026/08/15/where-synthetic-clinical-data-gets-its-correlations.html) | [notebook](01-synthea-nhanes-screening/notebook.ipynb) |
-| 02 | An agent layer is net overhead on fixed-output tasks | For a stable schema and a fixed output shape, orchestration and tool-calling buy nothing over a direct call plus deterministic code | *not yet published* | [repo](https://github.com/lecaibio/cabs-workshop-llm-agents) |
+| 02 | An agent layer is net overhead on fixed-output tasks | For a stable schema and a fixed output shape, orchestration and tool-calling buy nothing over a direct call plus deterministic code | *not yet published* | [repo](https://github.com/lecaibio/cabs-workshop-llm-agents), [scaffold](02-agent-autonomy-variance/) (parked) |
+| 03 | Tracing a reported p-value back to the CRF, in CDISC's own pilot submission | Every hop in the chain resolves and the primary-endpoint table rebuilds exactly — but at three of those hops the recorded derivation, run as written, does not reproduce the data | *not yet published* | [notebook](03-adam-traceability/notebook.ipynb) |
 
 Each directory stands on its own — its own README, its own `requirements.txt`, its own
 `setup.sh`, its own figures. Nothing imports anything from anywhere else.

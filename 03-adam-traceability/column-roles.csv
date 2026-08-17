@@ -1,0 +1,89 @@
+dataset,variable,label,role,named_in_analysis_metadata,why,how_define_xml_says_it_was_made,traces_to,where_in_the_source
+ADSL,STUDYID,Study Identifier,technical,,,DM.STUDYID,DM.STUDYID,CRF Page 7
+ADSL,USUBJID,Unique Subject Identifier,technical,,,DM.USUBJID,DM.USUBJID,Derived
+ADSL,SUBJID,Subject Identifier for the Study,technical,,,DM.SUBJID,DM.SUBJID,CRF Page 7
+ADSL,SITEID,Study Site Identifier,technical,,,DM.SITEID,DM.SITEID,Assigned
+ADSL,SITEGR1,Pooled Site Group 1,feature,,pooled site — a design variable and a factor in the sponsor's model,"refer to SAP, Section 7.1 - if not pooled then SITEGR1=SITEID. If pooled, SITEGR1 will be 900",,
+ADSL,ARM,Description of Planned Arm,feature,,randomised assignment; same content as TRT01P,DM.ARM,DM.ARM,Assigned
+ADSL,TRT01P,Planned Treatment for Period 01,feature,,"randomised assignment — the intervention, fixed before any outcome",DM.ARM,DM.ARM,Assigned
+ADSL,TRT01PN,Planned Treatment for Period 01 (N),feature,,numeric twin of TRT01P,Numeric code for TRT01P which corresponds to the randomized dose,,
+ADSL,TRT01A,Actual Treatment for Period 01,result,,actual treatment is knowable only after dosing (identical to planned here),"TRT01A=TRT01P, i.e., no difference between actual and randomized treatment in this study.",,
+ADSL,TRT01AN,Actual Treatment for Period 01 (N),result,,numeric twin of TRT01A,Numeric code for TRT01A which corresponds to the randomized dose,,
+ADSL,TRTSDT,Date of First Exposure to Treatment,feature,,"first dose date, fixed at the start","SV.SVSTDTC when SV.VISITNUM=3, converted to SAS date",SV.SVSTDTC,Derived
+ADSL,TRTEDT,Date of Last Exposure to Treatment,result,,date of last dose — encodes when the subject stopped,"The date of final dose (from the CRF) is EX.EXENDTC on the subject's last EX record. If the date of final dose is missing for the subject and the subject discontinued after visit 3, use the date of discontinuation as the date of last dose. Convert the date to a SAS date.",EX.EXENDTC,"CRF Page 105, 138"
+ADSL,TRTDUR,Duration of Treatment (days),result,,"TRTEDT-TRTSDT+1, so it encodes time on drug, i.e. discontinuation",TRTEDT-TRTSDT+1,,
+ADSL,AVGDD,Avg Daily Dose (as planned),result,,CUMDOSE/TRTDUR — inherits TRTDUR,CUMDOSE/TRTDUR,,
+ADSL,CUMDOSE,Cumulative Dose (as planned),result,,accumulates over time on drug,"For ARMN=0 or 1: CUMDOSE=TRT01PN*TRTDUR. --- For ARMN=2: CUMDOSE will be based on 54mg per day for the # of days subj was in 1st dosing interval (i.e., visit4date-TRTSTDT+1 if 1st interval completed, TRTEDT-TRTSTDT+1 if subj discontinued <=visit 4 and > visit 3), 81mg per day for the # of days subj was in 2nd dosing interval (i.e., visit12date-visit4date if 2nd interval completed, TRTEDT-visit4date if subj discontinued <= visit 12 and > visit 4), and 54mg per day for the # of days subj was in 3rd dosing interval (i.e., TRTEDT - visit12date if subj continued after visit 12).",,
+ADSL,AGE,Age,feature,yes,,DM.AGE,DM.AGE,Derived
+ADSL,AGEGR1,Pooled Age Group 1,feature,yes,banded AGE,Character variable derived from ADSL.AGEGR1N,ADSL.AGEGR1N,(inherits ADSL)
+ADSL,AGEGR1N,Pooled Age Group 1 (N),feature,,numeric twin of AGEGR1,AGEGR1 = 1 if AGE <65. AGEGR1 = 2 if AGE 65-80. AGEGR1 = 3 if AGE >80.,,
+ADSL,AGEU,Age Units,technical,,,DM.AGEU,DM.AGEU,Assigned
+ADSL,RACE,Race,feature,yes,,DM.RACE,DM.RACE,CRF Page 7
+ADSL,RACEN,Race (N),feature,,numeric twin of RACE,Numeric code for RACE,,
+ADSL,SEX,Sex,feature,yes,,DM.SEX,DM.SEX,CRF Page 7
+ADSL,ETHNIC,Ethnicity,feature,,,DM.ETHNIC,DM.ETHNIC,Derived
+ADSL,SAFFL,Safety Population Flag,result,yes,requires a non-missing treatment start date,Y if ITTFL='Y' and TRTSDT ne missing. N otherwise,,
+ADSL,ITTFL,Intent-To-Treat Population Flag,technical,yes,"'Y if ARMCD ne blank' — true for everyone randomised, so it selects rather than informs",Y if ARMCD ne ' '. N otherwise,,
+ADSL,EFFFL,Efficacy Population Flag,result,yes,requires post-baseline ADAS-Cog and CIBIC+ records to exist,"Y if SAFFL='Y AND subject has at least one record in QS for ADAS-Cog with VISITNUM>3 AND at least one record in QS for CIBIC+ with VISITNUM>3, N otherwise",,
+ADSL,COMP8FL,Completers of Week 8 Population Flag,result,,completion status at week 8,"Y if subject has a SV.VISITNUM=8 and ENDDT >= date of visit 8, N otherwise",SV.VISITNUM,"CRF Pages 7, 22, 25, 32, 36, 42, 49, 52, 58, 67, 73, 82, 88, 90, 99, 108, 116, 121, 122, 123, 123, 125, 126, 128"
+ADSL,COMP16FL,Completers of Week 16 Population Flag,result,,completion status at week 16,"Y if subject has a SV.VISITNUM=10 and ENDDT>=date of visit 10, N otherwise",SV.VISITNUM,"CRF Pages 7, 22, 25, 32, 36, 42, 49, 52, 58, 67, 73, 82, 88, 90, 99, 108, 116, 121, 122, 123, 123, 125, 126, 128"
+ADSL,COMP24FL,Completers of Week 24 Population Flag,result,yes,completion status at week 24 — the discontinuation outcome in disguise,"Y if subject has a SV.VISITNUM=12 and ENDDT>= date of visit 12 , N otherwise",SV.VISITNUM,"CRF Pages 7, 22, 25, 32, 36, 42, 49, 52, 58, 67, 73, 82, 88, 90, 99, 108, 116, 121, 122, 123, 123, 125, 126, 128"
+ADSL,DISCONFL,Did the Subject Discontinue the Study?,result,yes,discontinuation outcome,Y if DCREASCD ^= 'Completed'. Null otherwise,,
+ADSL,DSRAEFL,Discontinued due to AE?,result,,discontinued because of an adverse event,Y if DCREASCD='Adverse Event'. Null otherwise,,
+ADSL,DTHFL,Subject Died?,result,,death,DM.DTHFL,DM.DTHFL,Derived
+ADSL,BMIBL,Baseline BMI (kg/m^2),feature,yes,from baseline height and weight,WEIGHTBL / ((HEIGHTBL*100)**2),,
+ADSL,BMIBLGR1,Pooled Baseline BMI Group 1,feature,yes,banded BMIBL,BMIBLGR1=Normal if . < BMIBL <25. BMIBLGR1=Overweight if 25 <=BMIBL <30. BMIBLGR1=Obese if BMIBL >=30,,
+ADSL,HEIGHTBL,Baseline Height (cm),feature,yes,,VSSTRESN when VS.VSTESTCD='HEIGHT' and VS.VISITNUM=1,VS.VSTESTCD,"CRF Pages 16, 17, 22, 23, 30, 33, 39, 45, 50, 55, 64, 70, 79, 85, 96, 102, 114, 135"
+ADSL,WEIGHTBL,Baseline Weight (kg),feature,yes,,VSSTRESN when VS.VSTESTCD='WEIGHT' and VS.VISITNUM=3,VS.VSTESTCD,"CRF Pages 16, 17, 22, 23, 30, 33, 39, 45, 50, 55, 64, 70, 79, 85, 96, 102, 114, 135"
+ADSL,EDUCLVL,Years of Education,feature,yes,,SC.SCSTRESN where SC.SCTESTCD=YEARSEDU,SC.SCSTRESN,Derived
+ADSL,DISONSDT,Date of Onset of Disease,feature,,,MH.MHSTDTC where MHCAT='PRIMARY DIAGNOSIS' converted to SAS date,MH.MHSTDTC,"CRF Pages 12, 14"
+ADSL,DURDIS,Duration of Disease (Months),feature,yes,,number of months between VISIT1DT and DISONSET,,
+ADSL,DURDSGR1,Pooled Disease Duration Group 1,feature,yes,banded DURDIS,grouping DURDIS values as <12 and >=12,,
+ADSL,VISIT1DT,Date of Visit 1,feature,,,"SV.SVSTDTC when SV.VISITNUM=1, converted to SAS date",SV.SVSTDTC,Derived
+ADSL,RFSTDTC,Subject Reference Start Date/Time,feature,,,DM.RFSTDTC,DM.RFSTDTC,Derived
+ADSL,RFENDTC,Subject Reference End Date/Time,result,,end-of-participation date,DM.RFENDTC,DM.RFENDTC,Derived
+ADSL,VISNUMEN,End of Trt Visit (Vis 12 or Early Term.),result,,last on-treatment visit,"if DS.VISITNUM=13 where DSTERM='PROTCOL COMPLETED' then VISNUMEN=12, otherwise VISNUMEN=DS.VISITNUM where DSTERM='PROTCOL COMPLETED'",DS.VISITNUM,"CRF Page 106, 139"
+ADSL,RFENDT,Date of Discontinuation/Completion,result,,numeric form of RFENDTC,RFENDTC converted to SAS date,,
+ADSL,DCDECOD,Standardized Disposition Term,result,,why the subject left the study,DS.DSDECOD where DSCAT='DISPOSITION EVENT',DS.DSDECOD,"CRF Page 106, 139"
+ADSL,DCREASCD,Reason for Discontinuation,result,yes,"why the subject left, pooled into categories",Grouping of DCDECOD values to support summarizing study completion status and reason for discontinuation,,
+ADSL,MMSETOT,MMSE Total,feature,yes,"screening MMSE, collected before randomisation",sum of QS.QSORRES values for the subject,QS.QSORRES,"CRF Pages 10, 11, 26, 27, 28, 29, 38, 44, 54, 59, 60, 61, 62, 63, 69, 74, 75, 76, 77, 78, 84, 89, 91, 92, 93, 94, 95, 101, 109, 110, 111, 112, 113, 130, 131, 132, 133, 134, 156, 157"
+ADQSADAS,STUDYID,Study Identifier,technical,,,ADSL.STUDYID,ADSL.STUDYID,(inherits ADSL)
+ADQSADAS,SITEID,Study Site Identifier,technical,,,ADSL.SITEID,ADSL.SITEID,(inherits ADSL)
+ADQSADAS,SITEGR1,Pooled Site Group 1,feature,,pooled site — a design variable and a factor in the sponsor's model,ADSL.SITEGR1,ADSL.SITEGR1,(inherits ADSL)
+ADQSADAS,USUBJID,Unique Subject Identifier,technical,,,ADSL.USUBJID,ADSL.USUBJID,(inherits ADSL)
+ADQSADAS,TRTSDT,Date of First Exposure to Treatment,feature,,"first dose date, fixed at the start",ADSL.TRTSDT,ADSL.TRTSDT,(inherits ADSL)
+ADQSADAS,TRTEDT,Date of Last Exposure to Treatment,result,,date of last dose — encodes when the subject stopped,ADSL.TRTEDT,ADSL.TRTEDT,(inherits ADSL)
+ADQSADAS,TRTP,Planned Treatment,feature,,randomised assignment carried down from ADSL,ADSL.TRT01P,ADSL.TRT01P,(inherits ADSL)
+ADQSADAS,TRTPN,Planned Treatment (N),feature,,numeric twin of TRTP; the dose term in the sponsor's model,ADSL.TRT01PN,ADSL.TRT01PN,(inherits ADSL)
+ADQSADAS,AGE,Age,feature,,,ADSL.AGE,ADSL.AGE,(inherits ADSL)
+ADQSADAS,AGEGR1,Pooled Age Group 1,feature,,banded AGE,ADSL.AGEGR1,ADSL.AGEGR1,(inherits ADSL)
+ADQSADAS,AGEGR1N,Pooled Age Group 1 (N),feature,,numeric twin of AGEGR1,ADSL.AGEGR1N,ADSL.AGEGR1N,(inherits ADSL)
+ADQSADAS,RACE,Race,feature,,,ADSL.RACE,ADSL.RACE,(inherits ADSL)
+ADQSADAS,RACEN,Race (N),feature,,numeric twin of RACE,ADSL.RACEN,ADSL.RACEN,(inherits ADSL)
+ADQSADAS,SEX,Sex,feature,,,ADSL.SEX,ADSL.SEX,(inherits ADSL)
+ADQSADAS,ITTFL,Intent-to-Treat Population Flag,technical,,"'Y if ARMCD ne blank' — true for everyone randomised, so it selects rather than informs",ADSL.ITTFL,ADSL.ITTFL,(inherits ADSL)
+ADQSADAS,EFFFL,Efficacy Population Flag,result,,requires post-baseline ADAS-Cog and CIBIC+ records to exist,ADSL.FASFL,ADSL.FASFL,(inherits ADSL)
+ADQSADAS,COMP24FL,Completers of Week 24 Population Flag,result,,completion status at week 24 — the discontinuation outcome in disguise,ADSL.COMP24FL,ADSL.COMP24FL,(inherits ADSL)
+ADQSADAS,AVISIT,Analysis Visit,technical,,,"Derived based on windowing algorithm described in SAP, Section 8.2",,
+ADQSADAS,AVISITN,Analysis Visit (N),technical,,,Numeric code for AVISIT,,
+ADQSADAS,VISIT,Visit Name,technical,,,QS.VISIT,QS.VISIT,"CRF Pages 10, 11, 26, 27, 28, 29, 38, 44, 54, 59, 60, 61, 62, 63, 69, 74, 75, 76, 77, 78, 84, 89, 91, 92, 93, 94, 95, 101, 109, 110, 111, 112, 113, 130, 131, 132, 133, 134, 156, 157"
+ADQSADAS,VISITNUM,Visit Number,technical,,,QS.VISITNUM,QS.VISITNUM,"CRF Pages 10, 11, 26, 27, 28, 29, 38, 44, 54, 59, 60, 61, 62, 63, 69, 74, 75, 76, 77, 78, 84, 89, 91, 92, 93, 94, 95, 101, 109, 110, 111, 112, 113, 130, 131, 132, 133, 134, 156, 157"
+ADQSADAS,ADY,Analysis Relative Day,technical,,,"ADY = ADT - TRTSDT + 1, if ADT>=TRTSDT. ADY = ADT - TRTSDT, if ADT<TRTSDT.",,
+ADQSADAS,ADT,Analysis Date,technical,,,SAS date from QS.QSDTC,QS.QSDTC,Derived
+ADQSADAS,PARAM,Parameter,technical,,,,,
+ADQSADAS,PARAMCD,Parameter Code,technical,,,,,
+ADQSADAS,PARAMN,Parameter (N),technical,,,Assign a numeric code for each value of PARAMCD (see codelistPARAMN_ADQSADAS),,
+ADQSADAS,AVAL,Analysis Value,result,,the analysed value itself,,,
+ADQSADAS,BASE,Baseline Value,feature,,"pre-dose ADAS-Cog at visit 3; a covariate in the sponsor's own model, so an input",QS.QSSTRESN when QS.QSBLFL=Y (QS.VISITNUM=3),QS.QSSTRESN,Derived
+ADQSADAS,CHG,Baseline Value,result,yes,the endpoint — AVAL minus BASE,AVAL - BASE,,
+ADQSADAS,PCHG,Percent Change from Baseline,result,,the endpoint on a relative scale,100* (CHG/BASE),,
+ADQSADAS,ABLFL,ABLFL,technical,,,QS.QSBLFL,QS.QSBLFL,Derived
+ADQSADAS,ANL01FL,Analysis Record Flag 01,technical,,,"If multiple visits fall into the same visit window, then the one closest to the target date is chosen for analysis. These are flagged with ANL01FL=""Y"".",,
+ADQSADAS,DTYPE,Derivation Type,technical,,,,,
+ADQSADAS,AWRANGE,Analysis Window Valid Relative Range,technical,,,"Window range, specified in the SAP.",,
+ADQSADAS,AWTARGET,Analysis Window Target,technical,,,"Target day within the window, specified in the SAP.",,
+ADQSADAS,AWTDIFF,Analysis Window Diff from Target,technical,,,Absolute difference between AWTARGET and ADY,,
+ADQSADAS,AWLO,Analysis Window Beginning Timepoint,technical,,,"Start day of the window, specified in the SAP.",,
+ADQSADAS,AWHI,Analysis Window Ending Timepoint,technical,,,"End day of the window, specified in the SAP.",,
+ADQSADAS,AWU,Analysis Window Unit,technical,,,"Assigned as ""DAYS"".",,
+ADQSADAS,QSSEQ,Sequence Number,technical,,,,,

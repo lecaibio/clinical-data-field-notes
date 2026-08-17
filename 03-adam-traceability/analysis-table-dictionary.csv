@@ -1,0 +1,72 @@
+column,role,endpoint,timepoint,why,how_define_xml_says_it_was_made,traces_to,where_in_the_source
+USUBJID,technical,,baseline / fixed,,ADSL.USUBJID,ADSL.USUBJID,(inherits ADSL)
+STUDYID,technical,,baseline / fixed,,ADSL.STUDYID,ADSL.STUDYID,(inherits ADSL)
+SUBJID,technical,,baseline / fixed,,DM.SUBJID,DM.SUBJID,CRF Page 7
+SITEID,technical,,baseline / fixed,,ADSL.SITEID,ADSL.SITEID,(inherits ADSL)
+SITEGR1,feature,,baseline / fixed,pooled site — a design variable and a factor in the sponsor's model,ADSL.SITEGR1,ADSL.SITEGR1,(inherits ADSL)
+ARM,feature,,baseline / fixed,randomised assignment; same content as TRT01P,DM.ARM,DM.ARM,Assigned
+TRT01P,feature,,baseline / fixed,"randomised assignment — the intervention, fixed before any outcome",DM.ARM,DM.ARM,Assigned
+TRT01PN,feature,,baseline / fixed,numeric twin of TRT01P,Numeric code for TRT01P which corresponds to the randomized dose,,
+TRT01A,result,,baseline / fixed,actual treatment is knowable only after dosing (identical to planned here),"TRT01A=TRT01P, i.e., no difference between actual and randomized treatment in this study.",,
+TRT01AN,result,,baseline / fixed,numeric twin of TRT01A,Numeric code for TRT01A which corresponds to the randomized dose,,
+TRTSDT,feature,,baseline / fixed,"first dose date, fixed at the start",ADSL.TRTSDT,ADSL.TRTSDT,(inherits ADSL)
+TRTEDT,result,,baseline / fixed,date of last dose — encodes when the subject stopped,ADSL.TRTEDT,ADSL.TRTEDT,(inherits ADSL)
+TRTDUR,result,,baseline / fixed,"TRTEDT-TRTSDT+1, so it encodes time on drug, i.e. discontinuation",TRTEDT-TRTSDT+1,,
+AVGDD,result,,baseline / fixed,CUMDOSE/TRTDUR — inherits TRTDUR,CUMDOSE/TRTDUR,,
+CUMDOSE,result,,baseline / fixed,accumulates over time on drug,"For ARMN=0 or 1: CUMDOSE=TRT01PN*TRTDUR. --- For ARMN=2: CUMDOSE will be based on 54mg per day for the # of days subj was in 1st dosing interval (i.e., visit4date-TRTSTDT+1 if 1st interval completed, TRTEDT-TRTSTDT+1 if subj discontinued <=visit 4 and > visit 3), 81mg per day for the # of days subj was in 2nd dosing interval (i.e., visit12date-visit4date if 2nd interval completed, TRTEDT-visit4date if subj discontinued <= visit 12 and > visit 4), and 54mg per day for the # of days subj was in 3rd dosing interval (i.e., TRTEDT - visit12date if subj continued after visit 12).",,
+AGE,feature,,baseline / fixed,,ADSL.AGE,ADSL.AGE,(inherits ADSL)
+AGEGR1,feature,,baseline / fixed,banded AGE,ADSL.AGEGR1,ADSL.AGEGR1,(inherits ADSL)
+AGEGR1N,feature,,baseline / fixed,numeric twin of AGEGR1,ADSL.AGEGR1N,ADSL.AGEGR1N,(inherits ADSL)
+AGEU,technical,,baseline / fixed,,DM.AGEU,DM.AGEU,Assigned
+RACE,feature,,baseline / fixed,,ADSL.RACE,ADSL.RACE,(inherits ADSL)
+RACEN,feature,,baseline / fixed,numeric twin of RACE,ADSL.RACEN,ADSL.RACEN,(inherits ADSL)
+SEX,feature,,baseline / fixed,,ADSL.SEX,ADSL.SEX,(inherits ADSL)
+ETHNIC,feature,,baseline / fixed,,DM.ETHNIC,DM.ETHNIC,Derived
+SAFFL,result,,baseline / fixed,requires a non-missing treatment start date,Y if ITTFL='Y' and TRTSDT ne missing. N otherwise,,
+ITTFL,technical,,baseline / fixed,"'Y if ARMCD ne blank' — true for everyone randomised, so it selects rather than informs",ADSL.ITTFL,ADSL.ITTFL,(inherits ADSL)
+EFFFL,result,,baseline / fixed,requires post-baseline ADAS-Cog and CIBIC+ records to exist,ADSL.FASFL,ADSL.FASFL,(inherits ADSL)
+COMP8FL,result,,baseline / fixed,completion status at week 8,"Y if subject has a SV.VISITNUM=8 and ENDDT >= date of visit 8, N otherwise",SV.VISITNUM,"CRF Pages 7, 22, 25, 32, 36, 42, 49, 52, 58, 67, 73, 82, 88, 90, 99, 108, 116, 121, 122, 123, 123, 125, 126, 128"
+COMP16FL,result,,baseline / fixed,completion status at week 16,"Y if subject has a SV.VISITNUM=10 and ENDDT>=date of visit 10, N otherwise",SV.VISITNUM,"CRF Pages 7, 22, 25, 32, 36, 42, 49, 52, 58, 67, 73, 82, 88, 90, 99, 108, 116, 121, 122, 123, 123, 125, 126, 128"
+COMP24FL,result,,baseline / fixed,completion status at week 24 — the discontinuation outcome in disguise,ADSL.COMP24FL,ADSL.COMP24FL,(inherits ADSL)
+DISCONFL,result,,baseline / fixed,discontinuation outcome,Y if DCREASCD ^= 'Completed'. Null otherwise,,
+DSRAEFL,result,,baseline / fixed,discontinued because of an adverse event,Y if DCREASCD='Adverse Event'. Null otherwise,,
+DTHFL,result,,baseline / fixed,death,DM.DTHFL,DM.DTHFL,Derived
+BMIBL,feature,,baseline / fixed,from baseline height and weight,WEIGHTBL / ((HEIGHTBL*100)**2),,
+BMIBLGR1,feature,,baseline / fixed,banded BMIBL,BMIBLGR1=Normal if . < BMIBL <25. BMIBLGR1=Overweight if 25 <=BMIBL <30. BMIBLGR1=Obese if BMIBL >=30,,
+HEIGHTBL,feature,,baseline / fixed,,VSSTRESN when VS.VSTESTCD='HEIGHT' and VS.VISITNUM=1,VS.VSTESTCD,"CRF Pages 16, 17, 22, 23, 30, 33, 39, 45, 50, 55, 64, 70, 79, 85, 96, 102, 114, 135"
+WEIGHTBL,feature,,baseline / fixed,,VSSTRESN when VS.VSTESTCD='WEIGHT' and VS.VISITNUM=3,VS.VSTESTCD,"CRF Pages 16, 17, 22, 23, 30, 33, 39, 45, 50, 55, 64, 70, 79, 85, 96, 102, 114, 135"
+EDUCLVL,feature,,baseline / fixed,,SC.SCSTRESN where SC.SCTESTCD=YEARSEDU,SC.SCSTRESN,Derived
+DISONSDT,feature,,baseline / fixed,,MH.MHSTDTC where MHCAT='PRIMARY DIAGNOSIS' converted to SAS date,MH.MHSTDTC,"CRF Pages 12, 14"
+DURDIS,feature,,baseline / fixed,,number of months between VISIT1DT and DISONSET,,
+DURDSGR1,feature,,baseline / fixed,banded DURDIS,grouping DURDIS values as <12 and >=12,,
+VISIT1DT,feature,,baseline / fixed,,"SV.SVSTDTC when SV.VISITNUM=1, converted to SAS date",SV.SVSTDTC,Derived
+RFSTDTC,feature,,baseline / fixed,,DM.RFSTDTC,DM.RFSTDTC,Derived
+RFENDTC,result,,baseline / fixed,end-of-participation date,DM.RFENDTC,DM.RFENDTC,Derived
+VISNUMEN,result,,baseline / fixed,last on-treatment visit,"if DS.VISITNUM=13 where DSTERM='PROTCOL COMPLETED' then VISNUMEN=12, otherwise VISNUMEN=DS.VISITNUM where DSTERM='PROTCOL COMPLETED'",DS.VISITNUM,"CRF Page 106, 139"
+RFENDT,result,,baseline / fixed,numeric form of RFENDTC,RFENDTC converted to SAS date,,
+DCDECOD,result,,baseline / fixed,why the subject left the study,DS.DSDECOD where DSCAT='DISPOSITION EVENT',DS.DSDECOD,"CRF Page 106, 139"
+DCREASCD,result,,baseline / fixed,"why the subject left, pooled into categories",Grouping of DCDECOD values to support summarizing study completion status and reason for discontinuation,,
+MMSETOT,feature,,baseline / fixed,"screening MMSE, collected before randomisation",sum of QS.QSORRES values for the subject,QS.QSORRES,"CRF Pages 10, 11, 26, 27, 28, 29, 38, 44, 54, 59, 60, 61, 62, 63, 69, 74, 75, 76, 77, 78, 84, 89, 91, 92, 93, 94, 95, 101, 109, 110, 111, 112, 113, 130, 131, 132, 133, 134, 156, 157"
+ADAS_AVAL_BASE,feature,ADAS-Cog (11) total,Baseline,measured before the first dose,ADQSADAS.AVAL where PARAMCD='ACTOT' and ANL01FL='Y',ADQSADAS.AVAL,"ADQSADAS, PARAMCD=ACTOT, AVISIT='Baseline'"
+ADAS_AVAL_W08,result,ADAS-Cog (11) total,Week 8,measured after randomisation,ADQSADAS.AVAL where PARAMCD='ACTOT' and ANL01FL='Y',ADQSADAS.AVAL,"ADQSADAS, PARAMCD=ACTOT, AVISIT='Week 8'"
+ADAS_CHG_W08,result,ADAS-Cog (11) total,Week 8,measured after randomisation,ADQSADAS.CHG where PARAMCD='ACTOT' and ANL01FL='Y',ADQSADAS.CHG,"ADQSADAS, PARAMCD=ACTOT, AVISIT='Week 8'"
+ADAS_LOCF_W08,result,ADAS-Cog (11) total,Week 8,"1 when this visit's value was carried forward (LOCF), i.e. the subject had no assessment in the window — a dropout indicator",ADQSADAS.DTYPE where PARAMCD='ACTOT' and ANL01FL='Y',ADQSADAS.DTYPE,"ADQSADAS, PARAMCD=ACTOT, AVISIT='Week 8'"
+ADAS_AVAL_W16,result,ADAS-Cog (11) total,Week 16,measured after randomisation,ADQSADAS.AVAL where PARAMCD='ACTOT' and ANL01FL='Y',ADQSADAS.AVAL,"ADQSADAS, PARAMCD=ACTOT, AVISIT='Week 16'"
+ADAS_CHG_W16,result,ADAS-Cog (11) total,Week 16,measured after randomisation,ADQSADAS.CHG where PARAMCD='ACTOT' and ANL01FL='Y',ADQSADAS.CHG,"ADQSADAS, PARAMCD=ACTOT, AVISIT='Week 16'"
+ADAS_LOCF_W16,result,ADAS-Cog (11) total,Week 16,"1 when this visit's value was carried forward (LOCF), i.e. the subject had no assessment in the window — a dropout indicator",ADQSADAS.DTYPE where PARAMCD='ACTOT' and ANL01FL='Y',ADQSADAS.DTYPE,"ADQSADAS, PARAMCD=ACTOT, AVISIT='Week 16'"
+ADAS_AVAL_W24,result,ADAS-Cog (11) total,Week 24,measured after randomisation,ADQSADAS.AVAL where PARAMCD='ACTOT' and ANL01FL='Y',ADQSADAS.AVAL,"ADQSADAS, PARAMCD=ACTOT, AVISIT='Week 24'"
+ADAS_CHG_W24,result,ADAS-Cog (11) total,Week 24,measured after randomisation,ADQSADAS.CHG where PARAMCD='ACTOT' and ANL01FL='Y',ADQSADAS.CHG,"ADQSADAS, PARAMCD=ACTOT, AVISIT='Week 24'"
+ADAS_LOCF_W24,result,ADAS-Cog (11) total,Week 24,"1 when this visit's value was carried forward (LOCF), i.e. the subject had no assessment in the window — a dropout indicator",ADQSADAS.DTYPE where PARAMCD='ACTOT' and ANL01FL='Y',ADQSADAS.DTYPE,"ADQSADAS, PARAMCD=ACTOT, AVISIT='Week 24'"
+CIBIC_AVAL_W08,result,CIBIC+,Week 8,measured after randomisation,ADQSCIBC.AVAL where PARAMCD='CIBICVAL' and ANL01FL='Y',ADQSCIBC.AVAL,"ADQSCIBC, PARAMCD=CIBICVAL, AVISIT='Week 8'"
+CIBIC_AVAL_W16,result,CIBIC+,Week 16,measured after randomisation,ADQSCIBC.AVAL where PARAMCD='CIBICVAL' and ANL01FL='Y',ADQSCIBC.AVAL,"ADQSCIBC, PARAMCD=CIBICVAL, AVISIT='Week 16'"
+CIBIC_LOCF_W16,result,CIBIC+,Week 16,"1 when this visit's value was carried forward (LOCF), i.e. the subject had no assessment in the window — a dropout indicator",ADQSCIBC.DTYPE where PARAMCD='CIBICVAL' and ANL01FL='Y',ADQSCIBC.DTYPE,"ADQSCIBC, PARAMCD=CIBICVAL, AVISIT='Week 16'"
+CIBIC_AVAL_W24,result,CIBIC+,Week 24,measured after randomisation,ADQSCIBC.AVAL where PARAMCD='CIBICVAL' and ANL01FL='Y',ADQSCIBC.AVAL,"ADQSCIBC, PARAMCD=CIBICVAL, AVISIT='Week 24'"
+CIBIC_LOCF_W24,result,CIBIC+,Week 24,"1 when this visit's value was carried forward (LOCF), i.e. the subject had no assessment in the window — a dropout indicator",ADQSCIBC.DTYPE where PARAMCD='CIBICVAL' and ANL01FL='Y',ADQSCIBC.DTYPE,"ADQSCIBC, PARAMCD=CIBICVAL, AVISIT='Week 24'"
+NPI_AVAL_BASE,feature,NPI-X total,Baseline,measured before the first dose,ADQSNPIX.AVAL where PARAMCD='NPTOT' and ANL01FL='Y',ADQSNPIX.AVAL,"ADQSNPIX, PARAMCD=NPTOT, AVISIT='Baseline'"
+NPI_AVAL_W08,result,NPI-X total,Week 8,measured after randomisation,ADQSNPIX.AVAL where PARAMCD='NPTOT' and ANL01FL='Y',ADQSNPIX.AVAL,"ADQSNPIX, PARAMCD=NPTOT, AVISIT='Week 8'"
+NPI_CHG_W08,result,NPI-X total,Week 8,measured after randomisation,ADQSNPIX.CHG where PARAMCD='NPTOT' and ANL01FL='Y',ADQSNPIX.CHG,"ADQSNPIX, PARAMCD=NPTOT, AVISIT='Week 8'"
+NPI_AVAL_W16,result,NPI-X total,Week 16,measured after randomisation,ADQSNPIX.AVAL where PARAMCD='NPTOT' and ANL01FL='Y',ADQSNPIX.AVAL,"ADQSNPIX, PARAMCD=NPTOT, AVISIT='Week 16'"
+NPI_CHG_W16,result,NPI-X total,Week 16,measured after randomisation,ADQSNPIX.CHG where PARAMCD='NPTOT' and ANL01FL='Y',ADQSNPIX.CHG,"ADQSNPIX, PARAMCD=NPTOT, AVISIT='Week 16'"
+NPI_AVAL_W24,result,NPI-X total,Week 24,measured after randomisation,ADQSNPIX.AVAL where PARAMCD='NPTOT' and ANL01FL='Y',ADQSNPIX.AVAL,"ADQSNPIX, PARAMCD=NPTOT, AVISIT='Week 24'"
+NPI_CHG_W24,result,NPI-X total,Week 24,measured after randomisation,ADQSNPIX.CHG where PARAMCD='NPTOT' and ANL01FL='Y',ADQSNPIX.CHG,"ADQSNPIX, PARAMCD=NPTOT, AVISIT='Week 24'"
+NPI_AVAL_W04_24,result,NPI-X total,Weeks 4-24,measured after randomisation,ADQSNPIX.AVAL where PARAMCD='NPTOTMN' and ANL01FL='Y',ADQSNPIX.AVAL,"ADQSNPIX, PARAMCD=NPTOTMN, AVISIT='Weeks 4-24'"
