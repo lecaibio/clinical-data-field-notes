@@ -221,7 +221,7 @@ subject stopped, which is what a dropout or outcome model would be trying to pre
 | `SAFFL` | requires a treatment start date | `Y if ITTFL='Y' and TRTSDT ne missing` |
 | `DISCONFL` / `DSRAEFL` / `DCREASCD` | disposition | `Y if DCREASCD ^= 'Completed'`, etc. |
 
-The full sort is in [`column-roles.csv`](column-roles.csv): 88 rows, and for each one the
+The full sort is in [`column-roles.csv`](tables/column-roles.csv): 88 rows, and for each one the
 role, why it got that role, the derivation `define.xml` states, what it traces to, and where
 that lands in the source. The features that make it all the way to a CRF page look like this:
 
@@ -241,7 +241,7 @@ surfaces that; reading alone does not.
 ## The table to actually train on
 
 Sorting the columns is the work; the deliverable is a flat table that carries the sorting
-with it. [`analysis-table.csv`](analysis-table.csv) is **254 rows, one per randomised
+with it. [`analysis-table.csv`](tables/analysis-table.csv) is **254 rows, one per randomised
 subject, and 71 columns**, with each visit of a repeated measure in its own column.
 
 Three efficacy endpoints go in wide, at the visits the report analyses them at, taking the
@@ -257,7 +257,7 @@ record each analysis actually used (`ANL01FL='Y'`):
 | `NPI_AVAL_W08` … `_W24`, `NPI_CHG_W08` … `_W24`, `NPI_AVAL_W04_24` | result | NPI-X, including the Weeks 4–24 mean the SAP defines |
 
 plus the 25 baseline features and 6 identifiers from ADSL. Roles across the whole table:
-**25 feature, 40 result, 6 technical**. [`analysis-table-dictionary.csv`](analysis-table-dictionary.csv)
+**25 feature, 40 result, 6 technical**. [`analysis-table-dictionary.csv`](tables/analysis-table-dictionary.csv)
 carries one row per column with the role, the reason, the derivation `define.xml` states,
 and where it traces to.
 
@@ -300,7 +300,7 @@ A full run leaves **88 MB** under `data/`, all of it re-downloadable:
 | `data/sdtm/` | 24 MB, the QS tabulation and the SDTM `define.xml` |
 | `data/csr/` | 5.7 MB, the study report |
 
-The figures, the three CSVs and the notebook's embedded outputs are the durable
+The figures, the three CSVs in `tables/`, and the notebook's embedded outputs are the durable
 artifacts, so:
 
 ```bash
